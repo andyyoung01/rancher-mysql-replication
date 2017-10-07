@@ -1,0 +1,11 @@
+version: '2'
+services:
+  mysql-replication-master:
+    scale: 1
+    start_on_create: true
+  mysql-replication-slave2:
+    scale: 1
+    start_on_create: true
+  mysql-replication-slave1:
+    scale: 1
+    start_on_create: true

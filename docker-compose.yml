@@ -1,0 +1,60 @@
+version: '2'
+services:
+  mysql-replication-master:
+    image: alanpeng/mysql5.7-replication-docker
+    ports:
+    - 3307:3306/tcp
+    volumes:
+    - /data/mysql:/var/lib/mysql
+    environment: 
+      MySQL_Role: Master
+      MYSQL_ROOT_PASSWORD: rootpass
+      REPLICATION_USER: repluser
+      REPLICATION_PASSWORD: 88888888
+      MasterIP: 192.168.56.201
+      Slave1IP: 192.168.56.202
+      Slave2IP: 192.168.56.203
+      MySQLPort: 3307
+    tty: true
+    stdin_open: true	
+    labels:
+      io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.scheduler.affinity:host_label: host=node1
+  mysql-replication-slave1:
+    image: alanpeng/mysql5.7-replication-docker
+    ports:
+    - 3307:3306/tcp
+    volumes:
+    - /data/mysql:/var/lib/mysql
+    environment: 
+      MySQL_Role: Slave1
+      MYSQL_ROOT_PASSWORD: rootpass
+      REPLICATION_USER: repluser
+      REPLICATION_PASSWORD: 88888888
+      MasterIP: 192.168.56.201
+      Slave1IP: 192.168.56.202
+      Slave2IP: 192.168.56.203
+      MySQLPort: 3307
+    tty: true
+    stdin_open: true	
+    labels:
+      io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+  mysql-replication-slave2:
+    image: alanpeng/mysql5.7-replication-docker
+    ports:
+    - 3307:3306/tcp
+    volumes:
+    - /data/mysql:/var/lib/mysql
+    environment: 
+      MySQL_Role: Slave2
+      MYSQL_ROOT_PASSWORD: rootpass
+      REPLICATION_USER: repluser
+      REPLICATION_PASSWORD: 88888888
+      MasterIP: 192.168.56.201
+      Slave1IP: 192.168.56.202
+      Slave2IP: 192.168.56.203
+      MySQLPort: 3307
+    tty: true
+    stdin_open: true	
+    labels:
+      io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}	  
