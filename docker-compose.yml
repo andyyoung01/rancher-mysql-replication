@@ -57,4 +57,24 @@ services:
     tty: true
     stdin_open: true	
     labels:
-      io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}	  
+      io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+
+  mysql-maxscale:
+    image: registry.cn-beijing.aliyuncs.com/andyyoung01/maxscale
+    ports:
+    - 3306:3306/tcp
+    environment: 
+      REPLICATION_USER: root
+      REPLICATION_PASSWORD: rootpass
+      MasterIP: 192.168.56.201
+      Slave1IP: 192.168.56.202
+      Slave2IP: 192.168.56.203
+      MySQLPort: 3307
+    tty: true
+    stdin_open: true	
+    depends_on:
+      - mysql-replication-master
+      - mysql-replication-slave1
+      - mysql-replication-slave2      
+    labels:
+      io.rancher.scheduler.affinity:host_label: host=node1      
